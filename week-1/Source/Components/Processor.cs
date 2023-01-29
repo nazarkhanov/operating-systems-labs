@@ -7,11 +7,12 @@ namespace Application.Source.Components
         private State _state = State.HALTING;
         private readonly Instructions _instructions = new Instructions();
         
-        public readonly Register pc = new Register();
-        public readonly Register ir = new Register();
-        public readonly Register mar = new Register();
-        public readonly Register mbr = new Register();
-        public readonly Register ac = new Register();
+        public readonly Register pc = new Register(); // program counter register
+        public readonly Register hr = new Register(); // halt register 
+        public readonly Register ir = new Register(); // instruction register
+        public readonly Register mar = new Register(); // memory address register
+        public readonly Register mbr = new Register(); // memory buffer register
+        public readonly Register ac = new Register(); // accumulator register
  
         public readonly Bus bus;
 
@@ -35,6 +36,11 @@ namespace Application.Source.Components
 
             while (_state != State.HALTING)
             {
+                if (pc.value == hr.value) {
+                    _state = State.HALTING;
+                    break;
+                } 
+
                 _state = State.FETCHING;
                 fetch();
                 _state = State.RUNNING;

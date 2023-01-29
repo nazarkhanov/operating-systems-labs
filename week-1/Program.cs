@@ -13,7 +13,6 @@ namespace Application
             sys.processor.define(0x3, new LoadInstruction());
             sys.processor.define(0x5, new AddInstruction());
             sys.processor.define(0x7, new StoreInstruction());
-            sys.processor.define(0xF, new HaltInstruction());
             
             // init memory
             sys.memory.write(0x300, 0x3005);
@@ -26,7 +25,7 @@ namespace Application
 
             // init start and end points
             sys.processor.pc.value = 0x300; // start here
-            sys.memory.write(0x303, 0xF000); // halt here
+            sys.processor.hr.value = 0x303; // halt here
 
             // start system
             sys.processor.start();
