@@ -25,7 +25,7 @@ namespace Application.Source.Components
         {
             STARTING,
             FETCHING,
-            RUNNING,
+            EXECUTING,
             HALTING,
         }
 
@@ -43,8 +43,11 @@ namespace Application.Source.Components
 
                 _state = State.FETCHING;
                 fetch();
-                _state = State.RUNNING;
+                print();
+
+                _state = State.EXECUTING;
                 execute();
+                print();
 
                 pc.value++;
             }
@@ -72,6 +75,27 @@ namespace Application.Source.Components
         public void define(int address, Instruction instruction)
         {
             _instructions.define(address, instruction);
+        }
+
+        private static int step = 0;
+
+        public void print() {
+            Console.WriteLine($"\n{++step}. {_state} \n");
+
+            Console.WriteLine("Memory:" + new string(' ', 28) + "CPU Registers");
+            Console.WriteLine(new string('-', 50));
+
+            var lines = bus.lines();
+
+            for (var i = 0; i < Math.Max(lines.Count, lines.Count); i++) {
+                Console.Write(lines[i]);
+
+                if (0 <= i && i <= 2) Console.Write("      ");
+                if (i == 0) Console.Write($"PC: 0x{pc.value, 0:X3}");
+                if (i == 1) Console.Write($"AC: 0x{ac.value, 0:X4}");
+                if (i == 2) Console.Write($"IR: 0x{ir.value, 0:X4}");
+                Console.Write('\n');
+            }
         }
     }
 }

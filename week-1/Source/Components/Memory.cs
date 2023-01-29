@@ -34,5 +34,7 @@ namespace Application.Source.Components
             var value = _bus.value();
             _cells[address] = value & ~(value >> 16 << 16);
         }
+
+        public Dictionary<int, int> cells => _cells;
     }
 }

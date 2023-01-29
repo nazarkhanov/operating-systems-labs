@@ -32,7 +32,7 @@ namespace Application
 
             // show result of computing - hex number
             var value = sys.memory.read(0x006);
-            Console.WriteLine($"Result: 0x{value, 0:X4}");
+            Console.WriteLine($"\n Result: 0x{value, 0:X4}");
         }
     }
 }
