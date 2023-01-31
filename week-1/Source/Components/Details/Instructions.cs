@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 namespace Application.Source.Components.Details
 {
+    using Specification = Dictionary<int, Instruction>;
+
     public interface Instruction
     {
         void execute(Processor processor);
@@ -9,16 +11,16 @@ namespace Application.Source.Components.Details
     
     public class Instructions
     {
-        private Dictionary<int, Instruction> map = new Dictionary<int, Instruction>();
+        private Specification spec = new Specification();
 
         public void define(int id, Instruction instruction)
         {
-            map[id] = instruction;
+            spec[id] = instruction;
         }
 
         public Instruction identify(int id)
         {
-            return map[id];
+            return spec[id];
         }
     }
     

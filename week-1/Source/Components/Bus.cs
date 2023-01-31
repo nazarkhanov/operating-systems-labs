@@ -33,7 +33,7 @@ namespace Application.Source.Components
 
         public List<string> lines()
         {
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
 
             foreach (var cell in _memory.cells)
                 lines.Add($"Address: 0x{cell.Key, 0:X3}, Value: 0x{cell.Value, 0:X4}");

@@ -2,9 +2,11 @@ using System.Collections.Generic;
 
 namespace Application.Source.Components
 {
+    using Cells = Dictionary<int, int>;
+    
     public class Memory
     {
-        private readonly Dictionary<int, int> _cells = new Dictionary<int, int>();
+        private readonly Cells _cells = new Cells();
         private readonly Bus _bus;
 
         public Memory(Bus bus)
@@ -35,6 +37,6 @@ namespace Application.Source.Components
             _cells[address] = value & ~(value >> 16 << 16);
         }
 
-        public Dictionary<int, int> cells => _cells;
+        public Cells cells => _cells;
     }
 }
