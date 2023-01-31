@@ -79,22 +79,24 @@ namespace Application.Source.Components
 
         private static int step = 0;
 
-        public void print() {
+        private void print() {
             Console.WriteLine($"\n{++step}. {_state} \n");
-
             Console.WriteLine("Memory:" + new string(' ', 28) + "CPU Registers");
             Console.WriteLine(new string('-', 50));
 
             var lines = bus.lines();
+            var values = new Dictionary<int, string>
+            {
+                {0, $"PC: 0x{pc.value, 0:X3}"},
+                {1, $"AC: 0x{ac.value, 0:X4}"},
+                {2, $"IR: 0x{ir.value, 0:X4}"},
+            };
 
-            for (var i = 0; i < Math.Max(lines.Count, lines.Count); i++) {
-                Console.Write(lines[i]);
-
-                if (0 <= i && i <= 2) Console.Write("      ");
-                if (i == 0) Console.Write($"PC: 0x{pc.value, 0:X3}");
-                if (i == 1) Console.Write($"AC: 0x{ac.value, 0:X4}");
-                if (i == 2) Console.Write($"IR: 0x{ir.value, 0:X4}");
-                Console.Write('\n');
+            for (var i = 0; i < Math.Max(lines.Count, values.Count); i++)
+            {
+                var value1 = i <= lines.Count - 1 ? lines[i] : "";
+                var value2 = i <= values.Count - 1 ? values[i] : "";
+                Console.Write($"{value1}{new string(' ', 6)}{value2}\n");
             }
         }
     }
