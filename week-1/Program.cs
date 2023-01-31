@@ -9,12 +9,12 @@ namespace Application
         {
             var sys = new Source.System();
             
-            // init instructions
-            sys.processor.instructions.define(0x3, new LoadInstruction());
-            sys.processor.instructions.define(0x5, new AddInstruction());
-            sys.processor.instructions.define(0x7, new StoreInstruction());
+            // register instructions
+            sys.processor.specification.define(0x3, new LoadInstruction());
+            sys.processor.specification.define(0x5, new AddInstruction());
+            sys.processor.specification.define(0x7, new StoreInstruction());
             
-            // init memory
+            // initialize memory
             sys.memory.write(0x300, 0x3005);
             sys.memory.write(0x301, 0x5940);
             sys.memory.write(0x302, 0x7006);
@@ -23,9 +23,9 @@ namespace Application
             sys.memory.write(0x940, 0x0002);
             sys.memory.write(0x006, 0x0000);
 
-            // init start and end points
-            sys.processor.registers.pc.value = 0x300; // start here
-            sys.processor.registers.hr.value = 0x303; // halt here
+            // initialize registers
+            sys.processor.registers.pc = 0x300; // start point
+            sys.processor.registers.hr = 0x303; // halt point
 
             // start system
             sys.processor.start();

@@ -1,49 +1,43 @@
-using System.Collections.Generic;
-
 namespace Application.Source.Components.Details
 {
-    using Specification = Dictionary<int, Instruction>;
-
-    public interface Instruction
+    public class Specification : Dictionary<int, Instruction>
     {
-        void execute(Processor processor);
-    } 
-    
-    public class Instructions
-    {
-        private Specification spec = new Specification();
-
         public void define(int id, Instruction instruction)
         {
-            spec[id] = instruction;
+            this[id] = instruction;
         }
 
         public Instruction identify(int id)
         {
-            return spec[id];
+            return this[id];
         }
+    };
+
+    public interface Instruction
+    {
+        void execute(Processor processor);
     }
-    
+
     public class LoadInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.registers.mbr.value = processor.bus.read();
-            processor.registers.ac.value = processor.registers.mbr.value;
+            processor.registers.mbr = processor.bus.read();
+            processor.registers.ac = processor.registers.mbr;
         } 
     }
     
     public class AddInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.registers.mbr.value = processor.bus.read();
-            processor.registers.ac.value += processor.registers.mbr.value;
+            processor.registers.mbr = processor.bus.read();
+            processor.registers.ac += processor.registers.mbr;
         } 
     }
 
     public class StoreInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.registers.mbr.value = processor.registers.ac.value;
+            processor.registers.mbr = processor.registers.ac;
             processor.bus.write();
         } 
     }

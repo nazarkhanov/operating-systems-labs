@@ -23,12 +23,12 @@ namespace Application.Source.Components
         
         public int address()
         {
-            return _processor.registers.mar.value;
+            return _processor.registers.mar;
         }
         
         public int value()
         {
-            return _processor.registers.mbr.value;
+            return _processor.registers.mbr;
         }
 
         public List<string> lines()

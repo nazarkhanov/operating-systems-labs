@@ -5,7 +5,7 @@ namespace Application.Source.Components
     public class Processor
     {
         private State _state = State.HALTING;
-        public readonly Instructions instructions = new Instructions();
+        public readonly Specification specification = new Specification();
         public readonly Registers registers = new Registers();
         public readonly Bus bus;
 
@@ -29,8 +29,8 @@ namespace Application.Source.Components
 
             while (_state != State.HALTING)
             {
-                if (registers.pc.value == registers.hr.value) {
-                    _state = State.HALTING;
+                if (registers.pc == registers.hr) {
+                    halt();
                     break;
                 } 
 
@@ -42,22 +42,22 @@ namespace Application.Source.Components
                 execute();
                 print();
 
-                registers.pc.value++;
+                registers.pc++;
             }
         }
 
         private void fetch()
         {
-            registers.mar.value = registers.pc.value;
-            registers.mbr.value = bus.read();
-            registers.ir.value = registers.mbr.value;
+            registers.mar = registers.pc;
+            registers.mbr = bus.read();
+            registers.ir = registers.mbr;
         }
 
         private void execute()
         {
-            registers.mar.value = registers.ir.value & ~(registers.ir.value >> 12 << 12);
-            var i = instructions.identify(registers.ir.value >> 12);
-            i?.execute(this);
+            registers.mar = registers.ir & ~(registers.ir >> 12 << 12);
+            var instruction = specification.identify(registers.ir >> 12);
+            instruction?.execute(this);
         }
 
         public void halt()
@@ -75,9 +75,9 @@ namespace Application.Source.Components
             var lines = bus.lines();
             var values = new Dictionary<int, string>
             {
-                {0, $"PC: 0x{registers.pc.value, 0:X3}"},
-                {1, $"AC: 0x{registers.ac.value, 0:X4}"},
-                {2, $"IR: 0x{registers.ir.value, 0:X4}"},
+                {0, $"PC: 0x{registers.pc, 0:X3}"},
+                {1, $"AC: 0x{registers.ac, 0:X4}"},
+                {2, $"IR: 0x{registers.ir, 0:X4}"},
             };
 
             for (var i = 0; i < Math.Max(lines.Count, values.Count); i++)
