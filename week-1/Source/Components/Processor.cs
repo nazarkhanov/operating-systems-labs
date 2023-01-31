@@ -72,9 +72,9 @@ namespace Application.Source.Components
             _state = State.HALTING;
         }
 
-        public void define(int address, Instruction instruction)
+        public void define(int id, Instruction instruction)
         {
-            _instructions.define(address, instruction);
+            _instructions.define(id, instruction);
         }
 
         private static int step = 0;
