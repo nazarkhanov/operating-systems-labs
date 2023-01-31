@@ -5,15 +5,8 @@ namespace Application.Source.Components
     public class Processor
     {
         private State _state = State.HALTING;
-        private readonly Instructions _instructions = new Instructions();
-        
-        public readonly Register pc = new Register(); // program counter register
-        public readonly Register hr = new Register(); // halt register 
-        public readonly Register ir = new Register(); // instruction register
-        public readonly Register mar = new Register(); // memory address register
-        public readonly Register mbr = new Register(); // memory buffer register
-        public readonly Register ac = new Register(); // accumulator register
- 
+        public readonly Instructions instructions = new Instructions();
+        public readonly Registers registers = new Registers();
         public readonly Bus bus;
 
         public Processor(Bus _bus)
@@ -36,7 +29,7 @@ namespace Application.Source.Components
 
             while (_state != State.HALTING)
             {
-                if (pc.value == hr.value) {
+                if (registers.pc.value == registers.hr.value) {
                     _state = State.HALTING;
                     break;
                 } 
@@ -49,32 +42,27 @@ namespace Application.Source.Components
                 execute();
                 print();
 
-                pc.value++;
+                registers.pc.value++;
             }
         }
 
         private void fetch()
         {
-            mar.value = pc.value;
-            mbr.value = bus.read();
-            ir.value = mbr.value;
+            registers.mar.value = registers.pc.value;
+            registers.mbr.value = bus.read();
+            registers.ir.value = registers.mbr.value;
         }
 
         private void execute()
         {
-            mar.value = ir.value & ~(ir.value >> 12 << 12);
-            var i = _instructions.identify(ir.value >> 12);
+            registers.mar.value = registers.ir.value & ~(registers.ir.value >> 12 << 12);
+            var i = instructions.identify(registers.ir.value >> 12);
             i?.execute(this);
         }
 
         public void halt()
         {
             _state = State.HALTING;
-        }
-
-        public void define(int id, Instruction instruction)
-        {
-            _instructions.define(id, instruction);
         }
 
         private static int step = 0;
@@ -87,9 +75,9 @@ namespace Application.Source.Components
             var lines = bus.lines();
             var values = new Dictionary<int, string>
             {
-                {0, $"PC: 0x{pc.value, 0:X3}"},
-                {1, $"AC: 0x{ac.value, 0:X4}"},
-                {2, $"IR: 0x{ir.value, 0:X4}"},
+                {0, $"PC: 0x{registers.pc.value, 0:X3}"},
+                {1, $"AC: 0x{registers.ac.value, 0:X4}"},
+                {2, $"IR: 0x{registers.ir.value, 0:X4}"},
             };
 
             for (var i = 0; i < Math.Max(lines.Count, values.Count); i++)

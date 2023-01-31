@@ -27,23 +27,23 @@ namespace Application.Source.Components.Details
     public class LoadInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.mbr.value = processor.bus.read();
-            processor.ac.value = processor.mbr.value;
+            processor.registers.mbr.value = processor.bus.read();
+            processor.registers.ac.value = processor.registers.mbr.value;
         } 
     }
     
     public class AddInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.mbr.value = processor.bus.read();
-            processor.ac.value += processor.mbr.value;
+            processor.registers.mbr.value = processor.bus.read();
+            processor.registers.ac.value += processor.registers.mbr.value;
         } 
     }
 
     public class StoreInstruction : Instruction {
         public void execute(Processor processor)
         {
-            processor.mbr.value = processor.ac.value;
+            processor.registers.mbr.value = processor.registers.ac.value;
             processor.bus.write();
         } 
     }
